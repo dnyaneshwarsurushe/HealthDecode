@@ -1,0 +1,7 @@
+Flask
+pypdf
+Pillow
+pytesseract
+gunicorn
+# Note: photo/scan uploads also need the Tesseract program installed
+# on the PC itself (not a pip package). .docx and .txt need no extra install.
