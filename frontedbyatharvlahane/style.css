@@ -246,12 +246,133 @@ input[type="file"] {
     outline: 3px solid #78dcb3;
 }
 
+.language-label {
+    display: block;
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 650;
+}
+
+#language {
+    margin-top: 5px;
+    padding: 9px 12px;
+    border: 1px solid #bdebd6;
+    border-radius: 9px;
+    color: var(--text);
+    background: white;
+    font: inherit;
+}
+
+.status {
+    min-height: 1.7em;
+    margin: 12px 0 0;
+}
+
+.status-error {
+    color: #a32626 !important;
+}
+
 /* Privacy and supporting text */
 
 .upload-card small,
 .upload-card .privacy {
     color: var(--muted);
     font-size: 13px;
+}
+
+.results-section {
+    max-width: 900px;
+    margin: 55px auto;
+    text-align: left;
+    scroll-margin-top: 90px;
+}
+
+.results-section > h2 {
+    text-align: center;
+}
+
+.results-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: 16px;
+}
+
+.result-card,
+.questions-card {
+    padding: 22px;
+    border: 1px solid #d5eee2;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 8px 25px #174b3708;
+}
+
+.result-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.result-heading h3,
+.questions-card h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.status-badge {
+    flex: 0 0 auto;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.status-low {
+    color: #805600;
+    background: #fff1c7;
+}
+
+.status-normal {
+    color: #05664f;
+    background: #d9f8e9;
+}
+
+.status-high {
+    color: #a32626;
+    background: #ffe1df;
+}
+
+.result-value {
+    margin: 16px 0 8px;
+    font-size: 21px;
+    font-weight: 750;
+}
+
+.result-meaning,
+.reference-range,
+.questions-card li {
+    color: var(--muted);
+}
+
+.reference-range {
+    margin-bottom: 0;
+    font-size: 14px;
+}
+
+.questions-card {
+    margin-top: 22px;
+}
+
+.questions-card ul {
+    margin-bottom: 0;
+    padding-left: 22px;
+}
+
+.educational-note {
+    color: var(--muted);
+    font-size: 14px;
+    text-align: center;
 }
 
 /* Sections and feature cards */

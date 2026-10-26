@@ -28,17 +28,36 @@
     <section class="upload-card">
       <div class="file-icon">📄</div>
       <h2>Upload your health report</h2>
-      <p>Select a PDF report from your device.</p>
+      <p>Select a PDF, Word, image, or text report from your device.</p>
 
       <label class="upload-btn" for="pdfFile">
-        Choose PDF report
+        Choose report
       </label>
-      <input id="pdfFile" type="file" accept=".pdf,application/pdf">
+      <input id="pdfFile" type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp,.bmp,.tif,.tiff,.txt,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*,text/plain">
 
       <p id="fileName" class="file-name">
-        PDF files only · Maximum 10 MB
+        PDF, Word, image, and text files
       </p>
-      <p id="status" role="status"></p>
+      <label class="language-label" for="language">Analysis language</label>
+      <select id="language" name="language">
+        <option value="en">English</option>
+        <option value="hi">Hindi</option>
+        <option value="mr">Marathi</option>
+      </select>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+    </section>
+
+    <section id="resultsSection" class="results-section" aria-labelledby="resultsHeading" hidden>
+      <h2 id="resultsHeading">Your results</h2>
+      <div id="resultsList" class="results-list"></div>
+
+      <div class="questions-card">
+        <h3>Questions to discuss with your doctor</h3>
+        <ul id="questionsList"></ul>
+      </div>
+      <p class="educational-note">
+        This is educational information only, not a diagnosis.
+      </p>
     </section>
 
     <p class="privacy">🔒 Your health information deserves privacy.</p>
@@ -65,8 +84,7 @@
     </section>
 
     <footer>
-      HealthDecode provides educational information, not a diagnosis.
-      Always consult a qualified healthcare professional.
+        This is educational information only, not a diagnosis.
     </footer>
   </main>
 
