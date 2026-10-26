@@ -56,9 +56,13 @@ def health():
     if not isinstance(result, dict):
         return jsonify({"error": "Ollama returned an invalid response."}), 502
 
+    pulled_models = result.get("models")
+    if not isinstance(pulled_models, list):
+        return jsonify({"error": "Ollama returned an invalid response."}), 502
+
     models = [
         model["name"]
-        for model in result.get("models", [])
+        for model in pulled_models
         if isinstance(model, dict) and isinstance(model.get("name"), str)
     ]
     return jsonify({"running": True, "models": models})
@@ -114,4 +118,4 @@ def chat():
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    app.run(host="127.0.0.1", port=5000)

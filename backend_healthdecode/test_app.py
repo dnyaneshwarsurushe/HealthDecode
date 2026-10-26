@@ -4,7 +4,7 @@ import unittest
 from unittest.mock import patch
 from urllib.error import HTTPError, URLError
 
-from app import MODEL, app
+from app import MODEL, SYSTEM_PROMPT, app
 
 
 class BackendTests(unittest.TestCase):
@@ -44,7 +44,7 @@ class BackendTests(unittest.TestCase):
             {
                 "model": MODEL,
                 "messages": [
-                    {"role": "system", "content": app.SYSTEM_PROMPT},
+                    {"role": "system", "content": SYSTEM_PROMPT},
                     {"role": "user", "content": "Hi"},
                 ],
                 "stream": False,
