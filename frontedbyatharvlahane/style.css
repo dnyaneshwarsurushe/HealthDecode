@@ -1,0 +1,382 @@
+
+/* =========================
+   HEALTHDECODE — MODERN UI
+========================= */
+
+:root {
+    --green: #078b68;
+    --green-dark: #05664f;
+    --mint: #e8fff5;
+    --text: #173c34;
+    --muted: #647b74;
+    --white: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+    color: var(--text);
+    line-height: 1.7;
+    background:
+        radial-gradient(ellipse at 10% 15%, #d5f8e8 0, transparent 35%),
+        radial-gradient(ellipse at 90% 35%, #d9f5ee 0, transparent 32%),
+        #f8fffb;
+    overflow-x: hidden;
+}
+
+/* Animated background glow */
+
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    filter: blur(75px);
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: -1;
+    animation: floatGlow 10s ease-in-out infinite alternate;
+}
+
+body::before {
+    background: #7ce9bb;
+    top: 18%;
+    left: -170px;
+}
+
+body::after {
+    background: #8edfd2;
+    right: -170px;
+    bottom: 5%;
+    animation-delay: -5s;
+}
+
+@keyframes floatGlow {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(35px, -35px) scale(1.2); }
+}
+
+/* Navigation */
+
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 7%;
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid #dcefe6;
+    box-shadow: 0 4px 25px #174b3710;
+}
+
+.logo {
+    color: var(--green);
+    font-size: 24px;
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.logo:hover {
+    color: var(--green-dark);
+}
+
+.navbar > a:last-child {
+    color: var(--text);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.25s;
+}
+
+.navbar > a:last-child:hover {
+    color: var(--green);
+}
+
+/* Hero section */
+
+.hero {
+    text-align: center;
+    padding: 75px 20px 30px;
+    animation: fadeUp 0.8s ease both;
+}
+
+.tag {
+    display: inline-block;
+    padding: 6px 15px;
+    border: 1px solid #bdebd6;
+    border-radius: 30px;
+    background: #edfff6;
+    color: var(--green-dark);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+h1 {
+    max-width: 900px;
+    margin: 22px auto;
+    font-size: clamp(34px, 5.5vw, 62px);
+    line-height: 1.15;
+    letter-spacing: -2px;
+    font-weight: 850;
+}
+
+h1 span {
+    color: var(--green);
+    background: linear-gradient(100deg, #087d5d, #19b887);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.intro {
+    max-width: 650px;
+    margin: 20px auto;
+    color: var(--muted);
+    font-size: 18px;
+}
+
+/* Upload card */
+
+.upload-card {
+    position: relative;
+    max-width: 680px;
+    margin: 35px auto;
+    padding: 38px 28px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid #d5eee2;
+    border-radius: 25px;
+    box-shadow:
+        0 20px 60px #155b4110,
+        0 4px 12px #155b4108;
+    animation: fadeUp 0.9s 0.15s ease both;
+    transition:
+        transform 0.35s ease,
+        box-shadow 0.35s ease,
+        border-color 0.35s ease;
+}
+
+.upload-card:hover {
+    transform: translateY(-5px);
+    border-color: #a4dec4;
+    box-shadow: 0 28px 65px #155b411b;
+}
+
+.file-icon {
+    display: grid;
+    place-items: center;
+    width: 76px;
+    height: 76px;
+    margin: 0 auto 18px;
+    border-radius: 23px;
+    background: linear-gradient(135deg, #d8ffeb, #effff8);
+    font-size: 35px;
+    animation: gentleFloat 3s ease-in-out infinite;
+}
+
+@keyframes gentleFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-7px); }
+}
+
+.upload-card h2 {
+    margin: 12px 0;
+    font-size: 25px;
+}
+
+.upload-card p {
+    color: var(--muted);
+}
+
+/* Green upload button */
+
+.upload-btn {
+    display: inline-block;
+    margin: 16px 0;
+    padding: 14px 27px;
+    border: 0;
+    border-radius: 12px;
+    background: linear-gradient(110deg, #078b68, #10a87b);
+    box-shadow: 0 8px 20px #078b6830;
+    color: white;
+    font-size: 15px;
+    font-weight: 750;
+    cursor: pointer;
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        filter 0.25s ease;
+}
+
+.upload-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 13px 28px #078b6840;
+    filter: brightness(1.05);
+}
+
+.upload-btn:active {
+    transform: scale(0.98);
+}
+
+.upload-btn:focus-visible {
+    outline: 3px solid #78dcb3;
+    outline-offset: 4px;
+}
+
+/* Hide browser's default file button.
+   The label above still opens the file picker. */
+
+input[type="file"] {
+    display: none;
+}
+
+.upload-card input[type="file"]:focus-visible + label {
+    outline: 3px solid #78dcb3;
+}
+
+/* Privacy and supporting text */
+
+.upload-card small,
+.upload-card .privacy {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* Sections and feature cards */
+
+section {
+    scroll-margin-top: 90px;
+}
+
+.features {
+    max-width: 1100px;
+    margin: 45px auto;
+    padding: 30px 20px 75px;
+    text-align: center;
+    animation: fadeUp 0.8s ease both;
+}
+
+.features > h2,
+section > h2 {
+    font-size: clamp(26px, 4vw, 36px);
+    letter-spacing: -0.7px;
+}
+
+.feature-card {
+    display: inline-block;
+    width: min(290px, 100%);
+    min-height: 190px;
+    margin: 12px;
+    padding: 28px 22px;
+    vertical-align: top;
+    text-align: left;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #dcefe6;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px #174b3708;
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+    border-color: #a8dfc7;
+    box-shadow: 0 18px 38px #174b3717;
+}
+
+.feature-card h3 {
+    margin-top: 8px;
+    font-size: 19px;
+}
+
+.feature-card p {
+    color: var(--muted);
+    font-size: 15px;
+}
+
+/* Entrance animation */
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(22px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile layout */
+
+@media (max-width: 600px) {
+    .navbar {
+        padding: 13px 5%;
+        gap: 10px;
+    }
+
+    .logo {
+        font-size: 19px;
+    }
+
+    .navbar > a:last-child {
+        font-size: 13px;
+    }
+
+    .hero {
+        padding: 50px 18px 20px;
+    }
+
+    h1 {
+        letter-spacing: -1px;
+    }
+
+    .intro {
+        font-size: 16px;
+    }
+
+    .upload-card {
+        margin: 25px 15px;
+        padding: 28px 18px;
+        border-radius: 20px;
+    }
+
+    .upload-card h2 {
+        font-size: 22px;
+    }
+
+    .features {
+        padding-bottom: 45px;
+    }
+
+    .feature-card {
+        margin: 10px 0;
+    }
+}
+
+/* Respect accessibility settings */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+}
