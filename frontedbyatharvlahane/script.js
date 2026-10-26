@@ -1,4 +1,3 @@
-
 const fileInput = document.getElementById("pdfFile");
 const fileName = document.getElementById("fileName");
 const statusMessage = document.getElementById("status");

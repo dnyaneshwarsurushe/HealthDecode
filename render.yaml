@@ -1,0 +1,10 @@
+# Render blueprint for the Lab Report Translator backend.
+# On Render: New → Web Service → connect the repo containing this file,
+# and Render picks up this blueprint automatically. Free plan.
+services:
+  - type: web
+    name: lab-report-translator
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT

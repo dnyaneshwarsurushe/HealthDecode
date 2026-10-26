@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#071a17">
+    <title>HealthDecode | Understand Your Health</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="background-glow glow-one"></div>
+    <div class="background-glow glow-two"></div>
+
+    <nav class="navbar">
+        <a href="#" class="logo">
+            <span class="logo-icon">✚</span> HealthDecode
+        </a>
+        <a href="#upload" class="nav-button">Try it now ↗</a>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="eyebrow">
+                <span class="live-dot"></span>
+                YOUR HEALTH, MADE CLEARER
+            </div>
+
+            <h1>Medical reports,<br>
+                <span class="gradient-text">without the confusion.</span>
+            </h1>
+
+            <p class="hero-description">
+                Turn complicated medical words into simple explanations.
+                Understand your report and prepare better questions for your doctor.
+            </p>
+
+            <div class="hero-actions">
+                <a href="#upload" class="primary-button">Understand my report <span>↗</span></a>
+                <a href="#features" class="secondary-button">Explore features ↓</a>
+            </div>
+
+            <div class="trust-line">
+                <span>✦</span> Simple language
+                <span>✦</span> Privacy-conscious
+                <span>✦</span> Doctor-first approach
+            </div>
+        </section>
+
+        <section class="dashboard" id="upload">
+            <div class="section-heading">
+                <div>
+                    <span class="section-label">YOUR HEALTH SPACE</span>
+                    <h2>Let's understand your report.</h2>
+                </div>
+                <span class="status-pill"><span class="live-dot"></span> Ready to begin</span>
+            </div>
+
+            <div class="upload-panel" id="dropZone">
+                <div class="upload-icon">↑</div>
+                <h3>Drop your medical report here</h3>
+                <p>Choose a PDF report from your device to get started.</p>
+
+                <label for="pdfFile" class="primary-button upload-button">
+                    Choose PDF report
+                </label>
+                <input type="file" id="pdfFile" accept=".pdf,application/pdf">
+
+                <p class="file-message" id="fileMessage" aria-live="polite">
+                    PDF files only · Your file stays on this page for this demo
+                </p>
+            </div>
+
+            <div class="health-grid">
+                <article class="health-card">
+                    <div class="card-top">
+                        <span class="card-icon">♥</span>
+                        <span class="sample-tag">EXAMPLE</span>
+                    </div>
+                    <p>Blood pressure</p>
+                    <h3>120/80 <small>mmHg</small></h3>
+                    <div class="card-note">Illustrative sample only</div>
+                </article>
+
+                <article class="health-card">
+                    <div class="card-top">
+                        <span class="card-icon">↗</span>
+                        <span class="sample-tag">EXAMPLE</span>
+                    </div>
+                    <p>Heart rate</p>
+                    <h3>72 <small>BPM</small></h3>
+                    <div class="card-note">Illustrative sample only</div>
+                </article>
+
+                <article class="health-card">
+                    <div class="card-top">
+                        <span class="card-icon">◎</span>
+                        <span class="sample-tag">EXAMPLE</span>
+                    </div>
+                    <p>Oxygen saturation</p>
+                    <h3>98<small>%</small></h3>
+                    <div class="card-note">Illustrative sample only</div>
+                </article>
+            </div>
+
+            <p class="sample-warning">
+                These numbers are examples, not your personal health readings
+                or a medical assessment.
+            </p>
+        </section>
+
+        <section class="features" id="features">
+            <div class="section-heading centered">
+                <span class="section-label">BUILT FOR EVERYONE</span>
+                <h2>Healthcare language, made human.</h2>
+                <p>Tools to help you understand information and talk with your doctor.</p>
+            </div>
+
+            <div class="feature-grid">
+                <article class="feature-card">
+                    <div class="feature-icon">✧</div>
+                    <h3>Simple explanations</h3>
+                    <p>Learn what difficult medical terms mean in everyday language.</p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon">☷</div>
+                    <h3>Report summaries</h3>
+                    <p>Get key information organized into an easier-to-read format.</p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon">♡</div>
+                    <h3>Doctor questions</h3>
+                    <p>Prepare useful questions to discuss with your healthcare professional.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="disclaimer">
+            <span>ⓘ</span>
+            <p><strong>Important:</strong> HealthDecode is an educational tool, not a
+            doctor or a diagnostic service. Do not use it to make treatment decisions.
+            Ask a qualified healthcare professional about your results.</p>
+        </section>
+    </main>
+
+    <footer>
+        <a href="#" class="logo"><span class="logo-icon">✚</span> HealthDecode</a>
+        <p>Making health information easier to understand. 💚</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
