@@ -52,7 +52,9 @@ MARKERS = [
      "low": 70, "high": 99, "unit": "mg/dL",
      "meaning": "Blood sugar measured after not eating overnight."},
     {"key": "glucose", "label": "Glucose",
-     "aliases": [r"glucose", r"blood sugar"],
+     "aliases": [r"glucose", r"blood sugar", r"\bppbs\b",
+                 r"post prandial blood sugar", r"\brbs\b",
+                 r"random blood sugar"],
      "low": 70, "high": 99, "unit": "mg/dL",
      "meaning": "The amount of sugar in the blood at the time of the test."},
     {"key": "hba1c", "label": "HbA1c",
@@ -64,7 +66,9 @@ MARKERS = [
      "low": 12.0, "high": 15.5, "unit": "g/dL",
      "meaning": "The protein in red blood cells that carries oxygen around the body."},
     {"key": "wbc", "label": "WBC (White Blood Cells)",
-     "aliases": [r"\bwbc\b", r"white blood cells", r"leukocytes"],
+     "aliases": [r"\bwbc\b", r"white blood cells", r"leukocytes",
+                 r"\btlc\b", r"total leukocyte count",
+                 r"total leucocyte count", r"total wbc count"],
      "low": 4.0, "high": 11.0, "unit": "x10^9/L",
      "meaning": "White blood cells help the body fight infections."},
     {"key": "rbc", "label": "RBC (Red Blood Cells)",
@@ -100,11 +104,11 @@ MARKERS = [
      "low": 200, "high": 900, "unit": "pg/mL",
      "meaning": "Vitamin B12 helps make red blood cells and keeps nerves healthy."},
     {"key": "alt", "label": "ALT",
-     "aliases": [r"\balt\b", r"alanine aminotransferase"],
+     "aliases": [r"\balt\b", r"alanine aminotransferase", r"\bsgpt\b"],
      "low": 7, "high": 56, "unit": "U/L",
      "meaning": "ALT is an enzyme mostly found in the liver; it is checked as a liver test."},
     {"key": "ast", "label": "AST",
-     "aliases": [r"\bast\b", r"aspartate aminotransferase"],
+     "aliases": [r"\bast\b", r"aspartate aminotransferase", r"\bsgot\b"],
      "low": 10, "high": 40, "unit": "U/L",
      "meaning": "AST is an enzyme found in the liver and other tissues."},
     {"key": "creatinine", "label": "Creatinine",
@@ -184,25 +188,36 @@ def allow_frontend(response):
 def _find_explicit_range(text_after):
     """Use ONLY the first parenthesised group after the value, e.g. (70-99)
     or (<200). Later groups belong to other tests on following lines."""
-    snippet = text_after[:40]
+    snippet = text_after[:120]
+    next_marker_positions = []
+    for marker in MARKERS:
+        for alias in marker["aliases"]:
+            match = re.search(alias, snippet)
+            if match:
+                next_marker_positions.append(match.start())
+    if next_marker_positions:
+        snippet = snippet[:min(next_marker_positions)]
     m = re.search(r"\(\s*([^)]*)\)", snippet)
     if not m:
         return None
     inner = m.group(1).strip()
-    m2 = re.match(r"([0-9.]+)\s*-\s*([0-9.]+)$", inner)
+    m2 = re.match(r"([\d,.]+)\s*-\s*([\d,.]+)$", inner)
     if m2:
-        return float(m2.group(1)), float(m2.group(2))
-    m2 = re.match(r"<\s*([0-9.]+)$", inner)
+        return (float(m2.group(1).replace(",", "")),
+                float(m2.group(2).replace(",", "")))
+    m2 = re.match(r"<\s*([\d,.]+)$", inner)
     if m2:
-        return None, float(m2.group(1))
-    m2 = re.match(r">\s*([0-9.]+)$", inner)
+        return None, float(m2.group(1).replace(",", ""))
+    m2 = re.match(r">\s*([\d,.]+)$", inner)
     if m2:
-        return float(m2.group(1)), None
+        return float(m2.group(1).replace(",", "")), None
     return None
 
 
 def parse_lab_text(text):
     """Find known markers in pasted text and flag each value."""
+    if not isinstance(text, str):
+        return []
     lowered = text.lower()
     results = []
     found_keys = set()
@@ -210,15 +225,29 @@ def parse_lab_text(text):
         # "Glucose" on its own must not double-count "Fasting Glucose".
         if marker["key"] == "glucose" and "fasting_glucose" in found_keys:
             continue
-        pattern = r"(?:%s)[^0-9\n]{0,25}?([0-9]+\.?[0-9]*)" % "|".join(marker["aliases"])
-        m = re.search(pattern, lowered)
-        if not m:
+        pattern = (
+            r"(?:%s)(?P<gap>[^0-9]{0,100}?)"
+            r"(?P<value>\d[\d,]*(?:\.\d+)?)"
+        ) % "|".join(marker["aliases"])
+        matches = re.finditer(pattern, lowered)
+        match = None
+        for candidate in matches:
+            gap = candidate.group("gap")
+            another_marker_precedes_value = any(
+                other["key"] != marker["key"]
+                and any(re.search(alias, gap) for alias in other["aliases"])
+                for other in MARKERS
+            )
+            if not another_marker_precedes_value:
+                match = candidate
+                break
+        if match is None:
             continue
-        value = float(m.group(1))
+        value = float(match.group("value").replace(",", ""))
         found_keys.add(marker["key"])
         low, high = marker["low"], marker["high"]
         range_source = "typical adult range"
-        explicit = _find_explicit_range(lowered[m.end():])
+        explicit = _find_explicit_range(lowered[match.end("value"):])
         if explicit:
             low, high = explicit
             range_source = "range printed in your report"
@@ -239,6 +268,32 @@ def parse_lab_text(text):
             "meaning": marker["meaning"],
         })
     return results
+
+
+def _seen_test_names(text):
+    """Find recognizable marker names or labels before numeric table values."""
+    names = []
+    lowered = text.lower()
+    for marker in MARKERS:
+        if any(re.search(alias, lowered) for alias in marker["aliases"]):
+            names.append(marker["label"])
+
+    if not names:
+        for line in text.splitlines():
+            value_match = re.search(r"\d[\d,]*(?:\.\d+)?", line)
+            if not value_match:
+                continue
+            candidate = re.sub(r"[^\w]+", " ", line[:value_match.start()]).strip()
+            if candidate and len(candidate) <= 60:
+                names.append(candidate)
+
+    unique_names = []
+    for name in names:
+        if name.casefold() not in {item.casefold() for item in unique_names}:
+            unique_names.append(name)
+        if len(unique_names) == 5:
+            break
+    return unique_names
 
 
 def questions_for_doctor(results, lang="en"):
@@ -375,25 +430,48 @@ def upload():
     except ValueError as exc:
         return jsonify({"error": str(exc)}), 400
     if not text.strip():
-        return jsonify({"error": "No readable text was found in that file. "
-                                 "Try a clearer file or paste the text."}), 400
+        return jsonify({
+            "error": (
+                "Almost no text could be extracted. The PDF may be scanned or "
+                "photo-based; please upload a text PDF or paste the report text."
+            ),
+        }), 400
     return jsonify({"text": text})
 
 
 @app.route("/analyze", methods=["POST"])
 def analyze():
     data = request.get_json(silent=True) or {}
+    if not isinstance(data, dict):
+        return jsonify({"error": "Please paste or upload a lab report first."}), 400
     text = data.get("text", "")
     lang = data.get("lang", "en")
     if lang not in SUPPORTED_LANGS:
         lang = "en"
-    if not text.strip():
-        return jsonify({"error": "Please paste or upload a lab report first."}), 400
+    if not isinstance(text, str):
+        return jsonify({"error": "Please paste or upload report text as a string."}), 400
+    text = text.strip()
     results = parse_lab_text(text)
     if not results:
+        if len(re.sub(r"\s", "", text)) < 20:
+            return jsonify({
+                "error": (
+                    "Very little text could be read from this report. The PDF may "
+                    "be scanned or photo-based; please upload a text PDF or paste "
+                    "the report text."
+                ),
+            }), 400
+        seen_names = _seen_test_names(text)
+        names_message = (
+            " Test names seen: " + ", ".join(seen_names) + "."
+            if seen_names else ""
+        )
         return jsonify({
-            "error": "No common lab markers were found in that text. "
-                     "Try the sample report, or paste text with test names and values.",
+            "error": (
+                "Text was extracted, but no supported lab markers with values "
+                "were found." + names_message +
+                " Try the sample report, or paste text with test names and values."
+            ),
         }), 400
     summary, used_llm = ollama_summary(results, lang)
     return jsonify({
